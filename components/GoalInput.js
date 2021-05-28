@@ -1,42 +1,66 @@
-import React, {useState} from 'react';
-import { Button, TextInput, View, StyleSheet } from 'react-native';
+import React, { useState } from "react";
+import { Button, TextInput, View, StyleSheet, Modal } from "react-native";
 
+const GoalInput = (props) => {
+  const [enteredGoal, setEnteredGoal] = useState("");
 
+  const goalInputHandler = (enteredText) => {
+    setEnteredGoal(enteredText);
+  };
 
-const GoalInput = props =>{
-    const [enteredGoal, setEnteredGoal] = useState("");
+  const addGoalHandler = () => {
+    props.onAddGoal(enteredGoal);
+    setEnteredGoal("");
+  };
 
-    const goalInputHandler = (enteredText) => {
-        setEnteredGoal(enteredText);
-      };
+  const cancelHandler = () =>{
+    props.onCancel();
+    setEnteredGoal("");
+  };
 
-      
-
-    return(
-        <View style={styles.userInputRow}>
+  return (
+    <Modal visible={props.visible} animationType="slide">
+      <View style={styles.userInputRow}>
         <TextInput
           style={styles.userInput}
           placeholder="Ziele 2021..."
           onChangeText={goalInputHandler}
           value={enteredGoal}
         />
-        <Button title="Add" onPress={props.onAddGoal.bind(this, enteredGoal)} />
+        <View style={styles.buttonContainer}>
+          <View style={styles.button}>
+            <Button title="Cancel" color="red" onPress={cancelHandler} />
+          </View>
+          <View style={styles.button}>
+            <Button title="Add" onPress={addGoalHandler} />
+          </View>
+        </View>
       </View>
-    );
-}
+    </Modal>
+  );
+};
 
 const styles = StyleSheet.create({
-    userInput: {
-        borderBottomColor: "black",
-        borderBottomWidth: 1,
-        padding: 10,
-        width: "80%",
-      },
-      userInputRow: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-      },
-})
+  userInput: {
+    borderBottomColor: "black",
+    borderBottomWidth: 1,
+    padding: 10,
+    width: "80%",
+    marginBottom: 10,
+  },
+  userInputRow: {
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "50%",
+  },
+  button: {
+    width: "40%"
+  },
+});
 
 export default GoalInput;
